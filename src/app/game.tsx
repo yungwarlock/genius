@@ -1,7 +1,6 @@
 import React from "react";
 
 import { useRouter } from "expo-router";
-import EvilIcons from "@expo/vector-icons/EvilIcons";
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 

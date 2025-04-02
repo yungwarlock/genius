@@ -4,8 +4,9 @@ import { Stack } from "expo-router";
 import { ThemeProvider, DefaultTheme } from "@react-navigation/native";
 
 import Layout from "@/ui/components/Layout";
-import GameSound from "@/services/GameSound";
+import GameSoundProvider from "@/services/GameSound";
 import useTitilliumWeb from "@/assets/fonts/Titillium_Web";
+
 
 const MyTheme = {
   ...DefaultTheme,
@@ -25,7 +26,7 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={MyTheme}>
-      <GameSound>
+      <GameSoundProvider>
         <Layout>
           <Stack
             screenOptions={{
@@ -53,7 +54,7 @@ export default function RootLayout() {
             />
           </Stack>
         </Layout>
-      </GameSound>
+      </GameSoundProvider>
     </ThemeProvider>
   );
 };
