@@ -1,9 +1,12 @@
 import React from "react";
 
-import { useRouter } from "expo-router";
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 
+import { nanoid } from "nanoid";
+
+import GameManager from "@/engine";
+import { Result } from "@/engine/types";
 import Keypad from "@/ui/components/Keypad";
 import GameOver from "@/ui/components/GameOver";
 import GameOptions from "@/ui/components/GameOptions";
@@ -12,26 +15,28 @@ import CodeDisplay from "@/ui/components/CodeDisplay";
 
 const Game = (): JSX.Element => {
   const maxSize = 4;
-  const router = useRouter();
+
+  const gameManager = React.useMemo(() => new GameManager(nanoid()), []);
 
   const [code, setCode] = React.useState<string[]>([]);
   const [showOptions, setShowOptions] = React.useState<boolean>(false);
   const [showGameOver, setShowGameOver] = React.useState<boolean>(false);
+  const [codeRes, setCodeRes] = React.useState<Result>({ deadCount: 0, injuredCount: 0 });
 
   const toggleOptions = () => setShowOptions(val => !val);
-  const toggleGameOver = () => setShowGameOver(val => !val);
+  // const toggleGameOver = () => setShowGameOver(val => !val);
 
   const onClear = () => setCode([]);
   const onKeyPress = (key: string | "enter") => {
     if (key === "enter") {
-      console.log("Enter pressed");
+      const res = gameManager.addTrial(code.join(""));
+      setCodeRes(res);
       return;
     }
 
     setCode((prevCode) => [...prevCode, key]);
   }
 
-  const handleClose = () => router.back();
 
   return (
     <View style={{ flex: 1 }}>
@@ -48,7 +53,7 @@ const Game = (): JSX.Element => {
         </View>
 
         <View style={styles.mainContainer}>
-          <CodeDisplay code={code} maxSize={maxSize} onClear={onClear} />
+          <CodeDisplay code={code} codeRes={codeRes} maxSize={maxSize} onClear={onClear} />
           <Keypad onKeyPress={onKeyPress} />
         </View>
       </View>

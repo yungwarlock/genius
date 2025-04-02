@@ -2,13 +2,18 @@ import React from "react";
 
 import { Text, StyleSheet, Pressable } from "react-native";
 
+import { Result } from "@/engine/types";
+import { formatResult } from "@/engine/utils";
+
+
 interface CodeDisplayProps {
   code: string[];
   maxSize: number;
+  codeRes: Result;
   onClear: () => void;
  }
 
-const CodeDisplay = ({ code, onClear, maxSize }: CodeDisplayProps): JSX.Element => {
+const CodeDisplay = ({ code, codeRes, onClear, maxSize }: CodeDisplayProps): JSX.Element => {
   const formattedValue = React.useMemo(() => {
     const newCode = [...code, ...Array.from({ length: maxSize - code.length }).map(() => "_")]
 
@@ -20,7 +25,7 @@ const CodeDisplay = ({ code, onClear, maxSize }: CodeDisplayProps): JSX.Element 
   return (
     <Pressable onPress={onClear} style={styles.display}>
       <Text style={styles.text}>{formattedValue}</Text>
-      <Text style={styles.resultsText}>1 Dead, 3 Injured</Text>
+      <Text style={styles.resultsText}>{formatResult(codeRes)}</Text>
     </Pressable>
   );
 };
