@@ -8,7 +8,7 @@ const GameOver = (): JSX.Element => {
     <View style={styles.container}>
       <View style={styles.headingContainer}>
         <Text style={styles.headingText}>Game Over</Text>
-        <Text style={styles.subHeadingText}>You're a Genius!</Text>
+        <Text style={styles.subHeadingText}>You"re a Genius!</Text>
       </View>
 
       <View style={{

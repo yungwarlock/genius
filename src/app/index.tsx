@@ -1,17 +1,26 @@
 import React from "react";
 
 import { Link } from "expo-router";
-import { Text, StyleSheet, View } from "react-native";
-import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
+import { Text, StyleSheet, View, Pressable } from "react-native";
+
+import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
+
+import { useGameSound } from "@/services/GameSound";
 
 
 export default function Index() {
+  const { isPlaying, toggleSound } = useGameSound();
+
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
-        <View style={styles.volumeButtonContainer}>
-          <SimpleLineIcons name="volume-1" size={40} color="white" />
-        </View>
+        <Pressable onPress={toggleSound} style={styles.volumeButtonContainer}>
+          {isPlaying ? (
+            <SimpleLineIcons name="volume-2" size={40} color="white" />
+          ) : (
+            <SimpleLineIcons name="volume-off" size={40} color="white" />
+          )}
+        </Pressable>
       </View>
       <View style={styles.bottomContainer}>
         <Text style={styles.headingText}>Genius</Text>

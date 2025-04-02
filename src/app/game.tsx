@@ -2,11 +2,12 @@ import React from "react";
 
 import { useRouter } from "expo-router";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
+import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 
 import Keypad from "@/ui/components/Keypad";
 import GameOver from "@/ui/components/GameOver";
-import HomeOptions from "@/ui/components/HomeOption";
+import GameOptions from "@/ui/components/GameOptions";
 import CodeDisplay from "@/ui/components/CodeDisplay";
 
 
@@ -17,6 +18,9 @@ const Game = (): JSX.Element => {
   const [code, setCode] = React.useState<string[]>([]);
   const [showOptions, setShowOptions] = React.useState<boolean>(false);
   const [showGameOver, setShowGameOver] = React.useState<boolean>(false);
+
+  const toggleOptions = () => setShowOptions(val => !val);
+  const toggleGameOver = () => setShowGameOver(val => !val);
 
   const onClear = () => setCode([]);
   const onKeyPress = (key: string | "enter") => {
@@ -33,11 +37,12 @@ const Game = (): JSX.Element => {
   return (
     <View style={{ flex: 1 }}>
       {showGameOver && <GameOver />}
-      {showOptions && <HomeOptions />}
+      {showOptions && <GameOptions onClose={toggleOptions} />}
+
       <View style={styles.container}>
         <View style={styles.headingContainer}>
-          <Pressable onPress={handleClose}>
-            <EvilIcons name="close" size={32} color="white" />
+          <Pressable onPress={toggleOptions}>
+            <SimpleLineIcons name="menu" size={32} color="white" />
           </Pressable>
           <Text style={styles.headingText}>07:38</Text>
           <View style={{ width: 32, height: 32 }} />
