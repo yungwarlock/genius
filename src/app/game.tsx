@@ -19,6 +19,7 @@ const Game = (): JSX.Element => {
   const gameManager = React.useMemo(() => new GameManager(nanoid()), []);
 
   const [code, setCode] = React.useState<string[]>([]);
+  const [shouldClear, setShouldClear] = React.useState<boolean>(false);
   const [showOptions, setShowOptions] = React.useState<boolean>(false);
   const [showGameOver, setShowGameOver] = React.useState<boolean>(false);
   const [codeRes, setCodeRes] = React.useState<Result>({ deadCount: 0, injuredCount: 0 });
@@ -31,12 +32,16 @@ const Game = (): JSX.Element => {
     if (key === "enter") {
       const res = gameManager.addTrial(code.join(""));
       setCodeRes(res);
+      setShouldClear(true);
       return;
     }
 
+    if(shouldClear) {
+      setCode([]);
+      setShouldClear(false);
+    }
     setCode((prevCode) => [...prevCode, key]);
   }
-
 
   return (
     <View style={{ flex: 1 }}>
