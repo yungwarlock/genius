@@ -65,7 +65,7 @@ const Game = (): JSX.Element => {
   }, [gameManagerRef]);
 
   React.useEffect(() => {
-    setGameId(nanoid());
+    setGameId("1");
   }, []);
 
   const onClear = () => setCode([]);

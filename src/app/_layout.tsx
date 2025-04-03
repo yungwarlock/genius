@@ -32,7 +32,9 @@ export default function RootLayout() {
             screenOptions={{
               animation: "fade",
               headerShown: false,
+              statusBarStyle: "light",
               statusBarTranslucent: true,
+              statusBarBackgroundColor: "black",
             }}>
             <Stack.Screen
               name="index"
