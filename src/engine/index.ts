@@ -1,7 +1,17 @@
 import Timer from "./timer";
 import { generateMainCode } from "./utils";
-import { Code, IHistory, Result, Trial } from "./types";
+import { Code, IHistory, Result, Trial, Unsubscribe } from "./types";
 
+type GameState = "TIME_CHANGE"
+  | "TIMER_PAUSED"
+  | "TIMER_RESUME"
+  | "STARTED"
+  | "COMPLETED"
+
+interface GameStateData {
+  type: GameState;
+  data: Record<string, unknown>;
+}
 
 class GameManager {
   private completed = false;
@@ -10,6 +20,7 @@ class GameManager {
   private readonly mainCode: string;
   private readonly timer = new Timer();
   private readonly history: Array<Trial> = [];
+  private listeners: Array<(state: GameStateData) => void> = [];
 
   constructor(id: string) {
     this.id = id;
@@ -48,6 +59,15 @@ class GameManager {
 
     if (result.deadCount === 4) {
       this.completed = true;
+      const event: GameStateData = {
+        type: "COMPLETED",
+        data: {
+          code: testCode,
+          trials: this.history.length,
+          period: this.timer.getElapsedTime(),
+        }
+      }
+      this.dispatchEvent(event);
     }
 
     this.history.push({
@@ -59,10 +79,53 @@ class GameManager {
     return result;
   }
 
+  public addListener(listener: (state: GameStateData) => void): Unsubscribe {
+    this.listeners.push(listener);
+    return () => {
+      this.listeners = this
+        .listeners
+        .filter((item) => item !== listener);
+    };
+  }
+
+  public pause() {
+    this.timer.pause();
+    const event: GameStateData = {
+      type: "TIMER_PAUSED",
+      data: {
+        period: this.timer.getElapsedTime(),
+      }
+    }
+    this.dispatchEvent(event);
+  }
+
+  public play() {
+    this.timer.resume();
+    const event: GameStateData = {
+      type: "TIMER_RESUME",
+      data: {
+        period: this.timer.getElapsedTime(),
+      }
+    }
+    this.dispatchEvent(event);
+  }
+
+  private dispatchEvent(event: GameStateData) {
+    for (const listener of this.listeners) {
+      listener(event);
+    }
+  }
+
   private startGameTimer() {
     this.timer.start();
     this.timer.addListener((period) => {
-      console.log(period);
+      const event: GameStateData = {
+        type: "TIME_CHANGE",
+        data: {
+          period: period,
+        }
+      }
+      this.dispatchEvent(event);
     });
   }
 

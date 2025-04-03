@@ -16,31 +16,76 @@ import CodeDisplay from "@/ui/components/CodeDisplay";
 const Game = (): JSX.Element => {
   const maxSize = 4;
 
-  const gameManager = React.useMemo(() => new GameManager(nanoid()), []);
-
   const [code, setCode] = React.useState<string[]>([]);
+  const [gameId, setGameId] = React.useState<string | null>(null);
   const [shouldClear, setShouldClear] = React.useState<boolean>(false);
   const [showOptions, setShowOptions] = React.useState<boolean>(false);
   const [showGameOver, setShowGameOver] = React.useState<boolean>(false);
   const [codeRes, setCodeRes] = React.useState<Result>({ deadCount: 0, injuredCount: 0 });
 
+  const gameManagerRef = React.useRef<GameManager | null>(null);
+  
   const toggleOptions = () => setShowOptions(val => !val);
-  // const toggleGameOver = () => setShowGameOver(val => !val);
+  const toggleGameOver = () => setShowGameOver(val => !val);
+
+  React.useEffect(() => {
+    if (gameId) {
+      gameManagerRef.current = new GameManager(gameId);
+    } else {
+      gameManagerRef.current = null;
+    }
+  }, [gameId]);
+
+  React.useEffect(() => {
+    const gameManager = gameManagerRef.current;
+
+    if (gameManager) {
+      const unsub = gameManager.addListener((state) => {
+        switch (state.type) {
+          case "TIME_CHANGE":
+            console.log(state.data.period as number);
+            break;
+          case "TIMER_PAUSED":
+            console.log("Timer paused");
+            break;
+          case "TIMER_RESUME":
+            console.log("Timer resume");
+            break;
+          case "COMPLETED":
+            toggleGameOver();
+            break;
+          case "STARTED":
+            console.log("Stated");
+            break;
+        }
+      });
+
+      return unsub;
+    }
+  }, [gameManagerRef]);
+
+  React.useEffect(() => {
+    setGameId(nanoid());
+  }, []);
 
   const onClear = () => setCode([]);
   const onKeyPress = (key: string | "enter") => {
-    if (key === "enter") {
-      const res = gameManager.addTrial(code.join(""));
-      setCodeRes(res);
-      setShouldClear(true);
-      return;
-    }
+    const gameManager = gameManagerRef.current;
 
-    if(shouldClear) {
-      setCode([]);
-      setShouldClear(false);
+    if (gameManager) {
+      if (key === "enter") {
+        const res = gameManager.addTrial(code.join(""));
+        setCodeRes(res);
+        setShouldClear(true);
+        return;
+      }
+
+      if (shouldClear) {
+        setCode([]);
+        setShouldClear(false);
+      }
+      setCode((prevCode) => [...prevCode, key]);
     }
-    setCode((prevCode) => [...prevCode, key]);
   }
 
   return (
