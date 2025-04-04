@@ -1,14 +1,17 @@
 import React from "react";
 
-import { View, Text, StyleSheet } from "react-native";
+import { router } from "expo-router";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 
 
 const GameOver = (): JSX.Element => {
+  const goHome = () => router.push("/");
+
   return (
     <View style={styles.container}>
       <View style={styles.headingContainer}>
         <Text style={styles.headingText}>Game Over</Text>
-        <Text style={styles.subHeadingText}>You"re a Genius!</Text>
+        <Text style={styles.subHeadingText}>You're a Genius!</Text>
       </View>
 
       <View style={{
@@ -26,6 +29,18 @@ const GameOver = (): JSX.Element => {
           <Text style={styles.factTitleText}>Time</Text>
           <Text style={styles.factValueText}>07:30</Text>
         </View>
+      </View>
+
+      <View style={styles.menu}>
+        <Pressable onPress={goHome}>
+          <Text style={styles.menuItemText}>Next Level</Text>
+        </Pressable>
+        <Pressable onPress={goHome}>
+          <Text style={styles.menuItemText}>Restart</Text>
+        </Pressable>
+        <Pressable onPress={goHome}>
+          <Text style={styles.menuItemText}>Home</Text>
+        </Pressable>
       </View>
     </View>
   );
@@ -59,7 +74,7 @@ const styles = StyleSheet.create({
   subHeadingText: {
     fontSize: 24,
     color: "#fff",
-    lineHeight: 16,
+    lineHeight: 28,
     fontFamily: "TitilliumWeb-Regular",
   },
   factContainer: {
@@ -69,17 +84,27 @@ const styles = StyleSheet.create({
   factTitleText: {
     fontSize: 28,
     color: "#fff",
-    lineHeight: 24,
     fontFamily: "TitilliumWeb-Regular",
   },
   factValueText: {
     fontSize: 42,
     color: "#fff",
+    lineHeight: 52,
     fontFamily: "TitilliumWeb-SemiBold",
   },
   options: {
     fontSize: 30,
     color: "white",
+    fontFamily: "TitilliumWeb-Regular",
+  },
+  menu: {
+    gap: 8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  menuItemText: {
+    fontSize: 24,
+    color: "#fff",
     fontFamily: "TitilliumWeb-Regular",
   }
 });
