@@ -8,6 +8,7 @@ import { nanoid } from "nanoid";
 import GameManager from "@/engine";
 import { Result } from "@/engine/types";
 import Keypad from "@/ui/components/Keypad";
+import History from "@/ui/components/History";
 import GameOver from "@/ui/components/GameOver";
 import GameOptions from "@/ui/components/GameOptions";
 import CodeDisplay from "@/ui/components/CodeDisplay";
@@ -19,12 +20,14 @@ const Game = (): JSX.Element => {
   const [code, setCode] = React.useState<string[]>([]);
   const [gameId, setGameId] = React.useState<string | null>(null);
   const [shouldClear, setShouldClear] = React.useState<boolean>(false);
+  const [showHistory, setShowHistory] = React.useState<boolean>(false);
   const [showOptions, setShowOptions] = React.useState<boolean>(false);
   const [showGameOver, setShowGameOver] = React.useState<boolean>(false);
   const [codeRes, setCodeRes] = React.useState<Result>({ deadCount: 0, injuredCount: 0 });
 
   const gameManagerRef = React.useRef<GameManager | null>(null);
-  
+
+  const toggleHistory = () => setShowHistory(val => !val);
   const toggleOptions = () => setShowOptions(val => !val);
   const toggleGameOver = () => setShowGameOver(val => !val);
 
@@ -91,6 +94,7 @@ const Game = (): JSX.Element => {
   return (
     <View style={{ flex: 1 }}>
       {showGameOver && <GameOver />}
+      {showHistory && <History onClose={toggleHistory} />}
       {showOptions && <GameOptions onClose={toggleOptions} />}
 
       <View style={styles.container}>
@@ -98,8 +102,14 @@ const Game = (): JSX.Element => {
           <Pressable onPress={toggleOptions}>
             <SimpleLineIcons name="menu" size={32} color="white" />
           </Pressable>
-          <Text style={styles.headingText}>07:38</Text>
-          <View style={{ width: 32, height: 32 }} />
+
+          <View style={{ flexDirection: "row", gap: 20 }}>
+            <Text style={styles.headingText}>Genius</Text>
+          </View>
+
+          <Pressable onPress={toggleHistory}>
+            <Text style={styles.headingText}>10</Text>
+          </Pressable>
         </View>
 
         <View style={styles.mainContainer}>

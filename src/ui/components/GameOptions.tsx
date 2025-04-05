@@ -3,7 +3,9 @@ import React from "react";
 import { useRouter } from "expo-router";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
 import { View, Pressable, Text, StyleSheet } from "react-native";
+
 import { useGameSound } from "@/services/GameSound";
+
 
 interface GameOptionsProps {
   onClose: () => void;
