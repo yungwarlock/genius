@@ -3,7 +3,7 @@ import React from "react";
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 
-import { nanoid } from "nanoid";
+import { nanoid } from "nanoid/non-secure";
 
 import GameManager from "@/engine";
 import { Result } from "@/engine/types";
@@ -68,7 +68,7 @@ const Game = (): JSX.Element => {
   }, [gameManagerRef]);
 
   React.useEffect(() => {
-    setGameId("1");
+    setGameId(nanoid(10));
   }, []);
 
   const onClear = () => setCode([]);
