@@ -1,7 +1,7 @@
 import React from "react";
 
 import EvilIcons from "@expo/vector-icons/EvilIcons";
-import { View, Pressable, Text, StyleSheet, ScrollView, Dimensions } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Dimensions, Pressable } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
 
@@ -82,36 +82,32 @@ interface HistoryProps {
   onClose: () => void;
 }
 
-const History = ({ onClose }: HistoryProps): JSX.Element => {
+const History = ({ onClose }: HistoryProps) => {
   return (
-    <View style={styles.container}>
-      <Pressable style={styles.closeBtn} onPress={onClose}>
-        <EvilIcons name="close" size={44} color="white" />
-      </Pressable>
-
-      <View style={styles.mainContainer}>
-        <View style={styles.blurBackground} />
-        <Animated.View entering={FadeInDown.springify()} style={styles.contentWrapper}>
-          <Text style={styles.title}>High Scores</Text>
-          <View style={styles.tableHeader}>
-            <Text style={[styles.tableHeadingText, styles.rankColumn]}>Rank</Text>
-            <Text style={[styles.tableHeadingText, styles.nameColumn]}>Name</Text>
-            <Text style={[styles.tableHeadingText, styles.scoreColumn]}>Score</Text>
-          </View>
-          <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-            {scores.map((score, index) => (
-              <Animated.View
-                key={score.id}
-                entering={FadeInDown.delay(index * 50)}
-                style={[styles.cell, score.id % 2 === 0 && styles.cellAlt]}
-              >
-                <Text style={[styles.cellText, styles.rankColumn]}>{score.id}</Text>
-                <Text style={[styles.cellText, styles.nameColumn]}>{score.name}</Text>
-                <Text style={[styles.cellText, styles.scoreColumn]}>{score.score}</Text>
-              </Animated.View>
-            ))}
-          </ScrollView>
-        </Animated.View>
+    <View style={styles.blurBackground}>
+      <View style={styles.closeBtn}>
+        <Pressable onPress={onClose} style={{ padding: 10 }}>
+          <EvilIcons name="close" size={44} color="white" />
+        </Pressable>
+        <Text style={styles.title}>History</Text>
+      </View>
+      <View style={styles.contentWrapper}>
+        <View style={styles.headingContainer}>
+          <Text style={styles.headingText}>Name</Text>
+          <Text style={styles.headingText}>Score</Text>
+        </View>
+        <ScrollView showsVerticalScrollIndicator={false} style={{ width: "100%" }}>
+          {scores.map((score, index) => (
+            <Animated.View
+              key={score.id}
+              entering={FadeInDown.delay(index * 50)}
+              style={[styles.cell, score.id % 2 === 0 && styles.cellAlt]}
+            >
+              <Text style={[styles.cellText, styles.nameColumn]}>{score.name}</Text>
+              <Text style={[styles.cellText, styles.scoreColumn]}>{score.score}</Text>
+            </Animated.View>
+          ))}
+        </ScrollView>
       </View>
     </View>
   );
@@ -123,10 +119,12 @@ const { width } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   closeBtn: {
-    top: 30,
-    left: 20,
-    zIndex: 40,
-    position: "absolute",
+    height: 90,
+    padding: 15,
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   container: {
     gap: 8,
@@ -150,12 +148,14 @@ const styles = StyleSheet.create({
   },
   blurBackground: {
     top: 0,
+    gap: 8,
     left: 0,
     zIndex: 20,
     width: "100%",
     height: "100%",
     position: "absolute",
-    backgroundColor: "rgba(17, 26, 114, 0.9)",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   itemsContainer: {
     gap: 8,
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     borderWidth: 2,
     borderColor: "rgba(255, 255, 255, 0.3)",
-    backgroundColor: "rgba(17, 26, 114, 0.95)",
+    backgroundColor: "rgba(8, 9, 15, 0.95)",
     overflow: "hidden",
     zIndex: 50,
     elevation: 5,
@@ -199,6 +199,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     color: "white",
+    width: "100%",
     textAlign: "center",
     marginVertical: 20,
     fontFamily: "TitilliumWeb-Bold",
@@ -208,6 +209,7 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     alignItems: "center",
+    paddingHorizontal: 15,
     justifyContent: "space-between",
   },
   tableHeader: {

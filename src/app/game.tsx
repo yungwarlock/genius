@@ -92,7 +92,7 @@ const Game = (): JSX.Element => {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, width: "100%", padding: 24 }}>
       {showGameOver && <GameOver />}
       {showHistory && <History onClose={toggleHistory} />}
       {showOptions && <GameOptions onClose={toggleOptions} />}
@@ -129,7 +129,6 @@ const styles = StyleSheet.create({
   container: {
     gap: 40,
     flex: 1,
-    padding: 24,
     width: "100%",
     height: "100%",
     justifyContent: "space-between",

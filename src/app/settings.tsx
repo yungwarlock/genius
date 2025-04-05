@@ -7,14 +7,14 @@ import { View, Pressable, Text, StyleSheet } from "react-native";
 import { useGameSound } from "@/services/GameSound";
 
 
-interface GameOptionsProps {
-  onClose: () => void;
-}
-
-const GameOptions = ({ onClose }: GameOptionsProps): JSX.Element => {
+const Instructions = (): JSX.Element => {
   const router = useRouter();
 
   const { isPlaying, toggleSound } = useGameSound();
+
+  const onClose = () => {
+    router.back();
+  };
 
   return (
     <View style={styles.container}>
@@ -23,7 +23,7 @@ const GameOptions = ({ onClose }: GameOptionsProps): JSX.Element => {
       </Pressable>
       <Pressable onPress={() => router.push("/instructions")}>
         <Text style={styles.options}>
-          Instructions
+          Account
         </Text>
       </Pressable>
       <Pressable onPress={toggleSound}>
@@ -33,7 +33,7 @@ const GameOptions = ({ onClose }: GameOptionsProps): JSX.Element => {
       </Pressable>
       <Pressable onPress={() => router.push("/")}>
         <Text style={styles.options}>
-          Home
+          Remove Ads
         </Text>
       </Pressable>
     </View>
@@ -41,7 +41,7 @@ const GameOptions = ({ onClose }: GameOptionsProps): JSX.Element => {
 };
 
 
-export default GameOptions;
+export default Instructions;
 
 
 const styles = StyleSheet.create({
@@ -52,16 +52,11 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   container: {
-    top: 0,
     gap: 8,
-    left: 0,
-    zIndex: 20,
     width: "100%",
     height: "100%",
-    position: "absolute",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   options: {
     fontSize: 30,

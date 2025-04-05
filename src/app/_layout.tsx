@@ -27,35 +27,46 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={MyTheme}>
       <GameSoundProvider>
-        <Layout>
-          <Stack
-            screenOptions={{
-              animation: "fade",
-              headerShown: false,
-              statusBarStyle: "light",
-              statusBarTranslucent: true,
-              statusBarBackgroundColor: "black",
-            }}>
-            <Stack.Screen
-              name="index"
-              options={{
-                title: "Home",
-              }}
-            />
-            <Stack.Screen
-              name="game"
-              options={{
-                title: "Game",
-              }}
-            />
-            <Stack.Screen
-              name="instructions"
-              options={{
-                title: "Game",
-              }}
-            />
-          </Stack>
-        </Layout>
+        <Stack
+          screenLayout={(props) => {
+            return (
+              <Layout>
+                {props.children}
+              </Layout>
+            );
+          }}
+          screenOptions={{
+            animation: "fade",
+            headerShown: false,
+            statusBarStyle: "light",
+            statusBarTranslucent: true,
+            statusBarBackgroundColor: "black",
+          }}>
+          <Stack.Screen
+            name="index"
+            options={{
+              title: "Home",
+            }}
+          />
+          <Stack.Screen
+            name="game"
+            options={{
+              title: "Game",
+            }}
+          />
+          <Stack.Screen
+            name="instructions"
+            options={{
+              title: "Game",
+            }}
+          />
+          <Stack.Screen
+            name="settings"
+            options={{
+              title: "Game",
+            }}
+          />
+        </Stack>
       </GameSoundProvider>
     </ThemeProvider>
   );
