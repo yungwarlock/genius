@@ -5,6 +5,8 @@ export default () => {
   const ORG_NAME = process.env.ORG_NAME;
   const PACKAGE_ID = process.env.PACKAGE_ID;
   const PROJECT_ID = process.env.PROJECT_ID;
+  const ADMOB_IOS_APP_ID = process.env.ADMOB_IOS_APP_ID;
+  const ADMOB_ANDROID_APP_ID = process.env.ADMOB_ANDROID_APP_ID;
 
   return {
     "expo": {
@@ -28,10 +30,25 @@ export default () => {
       },
       "web": {
         "bundler": "metro",
-        "output": "static",
+        "output": "server",
         "favicon": "./src/assets/images/favicon.png"
       },
       "plugins": [
+        [
+          "expo-build-properties",
+          {
+            "ios": {
+              "useFrameworks": "static"
+            }
+          }
+        ],
+        [
+          "react-native-google-mobile-ads",
+          {
+            "iosAppId": ADMOB_IOS_APP_ID,
+            "androidAppId": ADMOB_ANDROID_APP_ID
+          }
+        ],      
         "expo-router",
         [
           "expo-splash-screen",
