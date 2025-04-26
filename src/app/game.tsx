@@ -1,7 +1,7 @@
 import React from "react";
 
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { View, Text, StyleSheet, Pressable, Button } from "react-native";
 
 import { nanoid } from "nanoid/non-secure";
 
@@ -13,6 +13,11 @@ import GameOver from "@/ui/components/GameOver";
 import GameOptions from "@/ui/components/GameOptions";
 import CodeDisplay from "@/ui/components/CodeDisplay";
 
+enum Screen {
+  MAIN_GAME,
+  HISTORY,
+  GAME_OVER,
+}
 
 const Game = (): JSX.Element => {
   const maxSize = 4;
@@ -20,28 +25,19 @@ const Game = (): JSX.Element => {
   const [code, setCode] = React.useState<string[]>([]);
   const [gameId, setGameId] = React.useState<string | null>(null);
   const [shouldClear, setShouldClear] = React.useState<boolean>(false);
-  const [showHistory, setShowHistory] = React.useState<boolean>(false);
   const [showOptions, setShowOptions] = React.useState<boolean>(false);
-  const [showGameOver, setShowGameOver] = React.useState<boolean>(false);
+  const [remainingTrials, setRemainingTrials] = React.useState<number>(10);
+  const [currentScreen, setCurrentScreen] = React.useState<Screen>(Screen.MAIN_GAME);
   const [codeRes, setCodeRes] = React.useState<Result>({ deadCount: 0, injuredCount: 0 });
 
-  const gameManagerRef = React.useRef<GameManager | null>(null);
-
-  const toggleHistory = () => setShowHistory(val => !val);
-  const toggleOptions = () => setShowOptions(val => !val);
-  const toggleGameOver = () => setShowGameOver(val => !val);
-
-  React.useEffect(() => {
-    if (gameId) {
-      gameManagerRef.current = new GameManager(gameId);
-    } else {
-      gameManagerRef.current = null;
-    }
+  const gameManager = React.useMemo(() => {
+    return gameId ? new GameManager(gameId) : null;
   }, [gameId]);
 
-  React.useEffect(() => {
-    const gameManager = gameManagerRef.current;
+  const toggleOptions = () => setShowOptions(val => !val);
+  const toggleGameOver = () => setCurrentScreen(Screen.GAME_OVER);
 
+  React.useEffect(() => {
     if (gameManager) {
       const unsub = gameManager.addListener((state) => {
         switch (state.type) {
@@ -65,7 +61,7 @@ const Game = (): JSX.Element => {
 
       return unsub;
     }
-  }, [gameManagerRef]);
+  }, [gameManager]);
 
   React.useEffect(() => {
     setGameId(nanoid(10));
@@ -73,13 +69,12 @@ const Game = (): JSX.Element => {
 
   const onClear = () => setCode([]);
   const onKeyPress = (key: string | "enter") => {
-    const gameManager = gameManagerRef.current;
-
     if (gameManager) {
       if (key === "enter") {
         const res = gameManager.addTrial(code.join(""));
         setCodeRes(res);
         setShouldClear(true);
+        setRemainingTrials(val => val - 1);
         return;
       }
 
@@ -91,10 +86,16 @@ const Game = (): JSX.Element => {
     }
   }
 
+  const toggleScreens = () => {
+    if (currentScreen == Screen.MAIN_GAME) {
+      setCurrentScreen(Screen.HISTORY);
+    } else {
+      setCurrentScreen(Screen.MAIN_GAME);
+    }
+  }
+
   return (
     <View style={{ flex: 1, width: "100%", padding: 24 }}>
-      {showGameOver && <GameOver />}
-      {showHistory && <History onClose={toggleHistory} />}
       {showOptions && <GameOptions onClose={toggleOptions} />}
 
       <View style={styles.container}>
@@ -103,18 +104,32 @@ const Game = (): JSX.Element => {
             <SimpleLineIcons name="menu" size={32} color="white" />
           </Pressable>
 
-          <View style={{ flexDirection: "row", gap: 20 }}>
-            <Text style={styles.headingText}>Genius</Text>
+          <View style={{ flexDirection: "row", gap: 20, width: "100%", flex: 1, alignItems: "center" }}>
+            <Text style={styles.headingText}>
+              {currentScreen == Screen.HISTORY && "History"}
+              {currentScreen == Screen.MAIN_GAME && "Genius"}
+              {currentScreen == Screen.GAME_OVER && "Game Over"}
+            </Text>
           </View>
 
-          <Pressable onPress={toggleHistory}>
-            <Text style={styles.headingText}>10</Text>
+          <Pressable onPress={toggleScreens}>
+            <Text style={[styles.headingText, { width: 40, textAlign: "right" }]}>{remainingTrials}</Text>
           </Pressable>
         </View>
 
         <View style={styles.mainContainer}>
-          <CodeDisplay code={code} codeRes={codeRes} maxSize={maxSize} onClear={onClear} />
-          <Keypad onKeyPress={onKeyPress} />
+          {currentScreen == Screen.MAIN_GAME && (
+            <>
+              <CodeDisplay code={code} codeRes={codeRes} maxSize={maxSize} onClear={onClear} />
+              <Keypad onKeyPress={onKeyPress} />
+            </>
+          )}
+          {currentScreen == Screen.HISTORY && (
+            <History />
+          )}
+          {currentScreen == Screen.GAME_OVER && (
+            <GameOver />
+          )}
         </View>
       </View>
     </View>
@@ -134,8 +149,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   headingText: {
-    color: "white",
     fontSize: 24,
+    width: "100%",
+    color: "white",
+    textAlign: "center",
     fontFamily: "TitilliumWeb-Regular",
   },
   mainContainer: {

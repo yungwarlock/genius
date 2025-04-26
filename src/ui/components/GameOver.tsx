@@ -10,12 +10,12 @@ const GameOver = (): JSX.Element => {
   return (
     <View style={styles.container}>
       <View style={styles.headingContainer}>
-        <Text style={styles.headingText}>Game Over</Text>
-        <Text style={styles.subHeadingText}>You're a Genius!</Text>
+        <Text style={styles.headingText}>Complete!</Text>
+        <Text style={styles.subHeadingText}>Code found</Text>
       </View>
 
       <View style={{
-        gap: 56,
+        gap: 90,
         width: "100%",
         alignItems: "center",
         flexDirection: "row",
@@ -36,7 +36,7 @@ const GameOver = (): JSX.Element => {
           <Text style={styles.menuItemText}>Next Level</Text>
         </Pressable>
         <Pressable onPress={goHome}>
-          <Text style={styles.menuItemText}>Restart</Text>
+          <Text style={styles.menuItemText}>Try Again</Text>
         </Pressable>
         <Pressable onPress={goHome}>
           <Text style={styles.menuItemText}>Home</Text>
@@ -56,10 +56,11 @@ const styles = StyleSheet.create({
     zIndex: 1,
     width: "100%",
     height: "100%",
+    borderRadius: 12,
     position: "absolute",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(0, 0, 0, 0.3)",
   },
   headingContainer: {
     gap: 0,

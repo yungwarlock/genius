@@ -1,8 +1,11 @@
 import React from "react";
 
+import { router } from "expo-router";
+
 import EvilIcons from "@expo/vector-icons/EvilIcons";
-import { View, Text, StyleSheet, ScrollView, Dimensions, Pressable } from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
+
 
 
 const scores = [
@@ -78,186 +81,116 @@ const scores = [
   },
 ];
 
-interface HistoryProps {
-  onClose: () => void;
-}
 
-const History = ({ onClose }: HistoryProps) => {
+const History = () => {
+  const goHome = () => router.push("/");
+
   return (
-    <View style={styles.blurBackground}>
-      <View style={styles.closeBtn}>
-        <Pressable onPress={onClose} style={{ padding: 10 }}>
-          <EvilIcons name="close" size={44} color="white" />
-        </Pressable>
-        <Text style={styles.title}>History</Text>
+    <View style={styles.container}>
+      <View style={styles.headingContainer}>
+        <Text style={styles.subHeadingText}>Code</Text>
+        <Text style={styles.subHeadingText}>Timestamp</Text>
       </View>
-      <View style={styles.contentWrapper}>
-        <View style={styles.headingContainer}>
-          <Text style={styles.headingText}>Name</Text>
-          <Text style={styles.headingText}>Score</Text>
+
+      <View style={styles.headingContainer}>
+        <Text style={styles.subHeadingText}>Code</Text>
+        <Text style={styles.subHeadingText}>Timestamp</Text>
+      </View>
+      <View style={styles.headingContainer}>
+        <Text style={styles.subHeadingText}>Code</Text>
+        <Text style={styles.subHeadingText}>Timestamp</Text>
+      </View>
+
+      <View style={{
+        gap: 90,
+        width: "100%",
+        alignItems: "center",
+        flexDirection: "row",
+        justifyContent: "center",
+      }}>
+        <View style={styles.factContainer}>
+          <Text style={styles.factTitleText}>Trials</Text>
+          <Text style={styles.factValueText}>15</Text>
         </View>
-        <ScrollView showsVerticalScrollIndicator={false} style={{ width: "100%" }}>
-          {scores.map((score, index) => (
-            <Animated.View
-              key={score.id}
-              entering={FadeInDown.delay(index * 50)}
-              style={[styles.cell, score.id % 2 === 0 && styles.cellAlt]}
-            >
-              <Text style={[styles.cellText, styles.nameColumn]}>{score.name}</Text>
-              <Text style={[styles.cellText, styles.scoreColumn]}>{score.score}</Text>
-            </Animated.View>
-          ))}
-        </ScrollView>
+        <View style={styles.factContainer}>
+          <Text style={styles.factTitleText}>Time</Text>
+          <Text style={styles.factValueText}>07:30</Text>
+        </View>
+      </View>
+
+      <View style={styles.menu}>
+        <Pressable onPress={goHome}>
+          <Text style={styles.menuItemText}>Next Level</Text>
+        </Pressable>
+        <Pressable onPress={goHome}>
+          <Text style={styles.menuItemText}>Try Again</Text>
+        </Pressable>
+        <Pressable onPress={goHome}>
+          <Text style={styles.menuItemText}>Home</Text>
+        </Pressable>
       </View>
     </View>
-  );
+  )
 };
 
 export default History;
 
-const { width } = Dimensions.get("window");
-
 const styles = StyleSheet.create({
-  closeBtn: {
-    height: 90,
-    padding: 15,
-    width: "100%",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
   container: {
-    gap: 8,
-    zIndex: 1,
+    gap: 40,
     width: "100%",
     height: "100%",
-    position: "absolute",
+    borderRadius: 12,
+    overflow: "hidden",
+    backgroundColor: "rgba(0, 0, 0, 0.3)",
+  },
+  headingContainer: {
+    width: "100%",
+    paddingVertical: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 24,
+    justifyContent: "space-between",
+  },
+  headingText: {
+    fontSize: 48,
+    color: "#fff",
+    fontFamily: "TitilliumWeb-Bold",
+  },
+  subHeadingText: {
+    fontSize: 24,
+    color: "#fff",
+    lineHeight: 28,
+    fontFamily: "TitilliumWeb-Regular",
+  },
+  factContainer: {
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  factTitleText: {
+    fontSize: 28,
+    color: "#fff",
+    fontFamily: "TitilliumWeb-Regular",
+  },
+  factValueText: {
+    fontSize: 42,
+    color: "#fff",
+    lineHeight: 52,
+    fontFamily: "TitilliumWeb-SemiBold",
   },
   options: {
     fontSize: 30,
     color: "white",
     fontFamily: "TitilliumWeb-Regular",
   },
-  headingText: {
-    color: "white",
-    fontSize: 24,
-    fontFamily: "TitilliumWeb-Regular",
-  },
-  blurBackground: {
-    top: 0,
+  menu: {
     gap: 8,
-    left: 0,
-    zIndex: 20,
-    width: "100%",
-    height: "100%",
-    position: "absolute",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-  itemsContainer: {
-    gap: 8,
-    zIndex: 20,
-    padding: 8,
-    width: "100%",
-    height: "100%",
-    position: "absolute",
-    alignItems: "center",
-  },
-  mainContainer: {
-    flex: 1,
-    width: "100%",
-    height: "100%",
-    position: "relative",
     alignItems: "center",
     justifyContent: "center",
   },
-  contentWrapper: {
-    width: width * 0.9,
-    maxWidth: 500,
-    height: "80%",
-    borderRadius: 15,
-    borderWidth: 2,
-    borderColor: "rgba(255, 255, 255, 0.3)",
-    backgroundColor: "rgba(8, 9, 15, 0.95)",
-    overflow: "hidden",
-    zIndex: 50,
-    elevation: 5,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 32,
-    color: "white",
-    width: "100%",
-    textAlign: "center",
-    marginVertical: 20,
-    fontFamily: "TitilliumWeb-Bold",
-  },
-  headingContainer: {
-    height: 50,
-    width: "100%",
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 15,
-    justifyContent: "space-between",
-  },
-  tableHeader: {
-    padding: 15,
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    borderBottomWidth: 2,
-    borderBottomColor: "rgba(255, 255, 255, 0.3)",
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
-  },
-  rankColumn: {
-    width: "20%",
-    textAlign: "center",
-  },
-  nameColumn: {
-    width: "50%",
-    textAlign: "left",
-  },
-  scoreColumn: {
-    width: "30%",
-    textAlign: "right",
-  },
-  tableHeadingText: {
-    fontSize: 20,
-    color: "white",
-    fontFamily: "TitilliumWeb-Bold",
-  },
-  cell: {
-    padding: 15,
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
-  },
-  cellAlt: {
-    backgroundColor: "rgba(255, 255, 255, 0.02)",
-  },
-  cellText: {
-    fontSize: 16,
-    color: "white",
+  menuItemText: {
+    fontSize: 24,
+    color: "#fff",
     fontFamily: "TitilliumWeb-Regular",
-  },
-  button: {
-    padding: 16,
-    width: "100%",
-    borderRadius: 8,
-    alignItems: "center",
-    backgroundColor: "white",
-  },
+  }
 });
