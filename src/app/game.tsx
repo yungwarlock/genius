@@ -27,7 +27,7 @@ const Game = (): JSX.Element => {
   const [shouldClear, setShouldClear] = React.useState<boolean>(false);
   const [showOptions, setShowOptions] = React.useState<boolean>(false);
   const [remainingTrials, setRemainingTrials] = React.useState<number>(10);
-  const [currentScreen, setCurrentScreen] = React.useState<Screen>(Screen.MAIN_GAME);
+  const [currentScreen, setCurrentScreen] = React.useState<Screen>(Screen.GAME_OVER);
   const [codeRes, setCodeRes] = React.useState<Result>({ deadCount: 0, injuredCount: 0 });
 
   const gameManager = React.useMemo(() => {

@@ -3,9 +3,19 @@ import React from "react";
 import { router } from "expo-router";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 
+import { useAds } from "@/services/ads";
+
 
 const GameOver = (): JSX.Element => {
   const goHome = () => router.push("/");
+  const { toggleInterstitialAd, onClose } = useAds();
+
+  const onClickNextLevel = () => {
+    toggleInterstitialAd();
+    onClose(() => {
+      router.push("/game");
+    });
+  }
 
   return (
     <View style={styles.container}>
@@ -32,7 +42,7 @@ const GameOver = (): JSX.Element => {
       </View>
 
       <View style={styles.menu}>
-        <Pressable onPress={goHome}>
+        <Pressable onPress={onClickNextLevel}>
           <Text style={styles.menuItemText}>Next Level</Text>
         </Pressable>
         <Pressable onPress={goHome}>

@@ -3,6 +3,7 @@ import React from "react";
 import { Stack } from "expo-router";
 import { ThemeProvider, DefaultTheme } from "@react-navigation/native";
 
+import AdsProvider from "@/services/ads";
 import Layout from "@/ui/components/Layout";
 import GameSoundProvider from "@/services/sound";
 import useTitilliumWeb from "@/assets/fonts/Titillium_Web";
@@ -24,9 +25,17 @@ export default function RootLayout() {
     return null;
   }
 
+  const Providers = ({ children }: { children: React.ReactNode }) => (
+    <GameSoundProvider>
+      <AdsProvider>
+        {children}
+      </AdsProvider>
+    </GameSoundProvider>
+  );
+
   return (
     <ThemeProvider value={MyTheme}>
-      <GameSoundProvider>
+      <Providers>
         <Stack
           screenLayout={(props) => {
             return (
@@ -67,7 +76,7 @@ export default function RootLayout() {
             }}
           />
         </Stack>
-      </GameSoundProvider>
+      </Providers>
     </ThemeProvider>
   );
 };
