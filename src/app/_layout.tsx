@@ -4,7 +4,7 @@ import { Stack } from "expo-router";
 import { ThemeProvider, DefaultTheme } from "@react-navigation/native";
 
 import Layout from "@/ui/components/Layout";
-import GameSoundProvider from "@/services/GameSound";
+import GameSoundProvider from "@/services/sound";
 import useTitilliumWeb from "@/assets/fonts/Titillium_Web";
 
 

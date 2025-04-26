@@ -4,7 +4,7 @@ import { useRouter } from "expo-router";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
 import { View, Pressable, Text, StyleSheet } from "react-native";
 
-import { useGameSound } from "@/services/GameSound";
+import { useGameSound } from "@/services/sound";
 
 
 const Instructions = (): JSX.Element => {
