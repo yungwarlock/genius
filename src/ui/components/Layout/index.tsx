@@ -11,15 +11,11 @@ const Layout = ({ children }: LayoutProps): JSX.Element => {
   const isMobile = () => width <= 500;
 
   return (
-    <ImageBackground
-      resizeMode="cover"
-      style={styles.container}
-      source={require("@/assets/images/Home.png")}
-    >
+    <View style={styles.container}>
       <View style={[styles.contentContainer, { width: isMobile() ? width : width / 2.3 }]}>
         {children}
       </View>
-    </ImageBackground>
+    </View>
   );
 };
 
@@ -32,6 +28,7 @@ const styles = StyleSheet.create({
     height: "100%",
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "#1c1c83",
   },
   contentContainer: {
     height: "100%",
